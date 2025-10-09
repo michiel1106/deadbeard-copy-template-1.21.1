@@ -1,0 +1,81 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.deadbeard",
+				"texture_width": 116,
+				"texture_height": 86,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "root",
+					"pivot": [0, 11, 0]
+				},
+				{
+					"name": "Body",
+					"parent": "root",
+					"pivot": [0, 11, 0],
+					"cubes": [
+						{"origin": [-8, 11, -6], "size": [16, 18, 12], "uv": [0, 17]},
+						{"origin": [-8.5, 6.5, -6.5], "size": [17, 23, 13], "uv": [56, 16]}
+					]
+				},
+				{
+					"name": "Head",
+					"parent": "Body",
+					"pivot": [0, 26, -5],
+					"cubes": [
+						{"origin": [-4, 26, -9], "size": [8, 9, 8], "uv": [0, 0]},
+						{"origin": [-3.5, 26.5, -8.5], "size": [7, 7, 1], "uv": [25, 0]},
+						{"origin": [-6, 32, -9.5], "size": [12, 7, 9], "uv": [33, 0]},
+						{"origin": [-7, 20, -8], "size": [14, 11, 0], "uv": [75, 0]}
+					]
+				},
+				{
+					"name": "ArmRight",
+					"parent": "Body",
+					"pivot": [-10.5, 27, 0],
+					"cubes": [
+						{"origin": [-13, 16, -2.5], "size": [5, 13, 5], "uv": [0, 47]},
+						{"origin": [-13.5, 19, -3], "size": [6, 2, 6], "uv": [20, 47]}
+					]
+				},
+				{
+					"name": "ArmLeft",
+					"parent": "Body",
+					"pivot": [10.5, 27, 0],
+					"cubes": [
+						{"origin": [8, 16, -2.5], "size": [5, 13, 5], "uv": [0, 65]},
+						{"origin": [7.5, 19, -3], "size": [6, 2, 6], "uv": [20, 65]}
+					]
+				},
+				{
+					"name": "LegRight",
+					"parent": "root",
+					"pivot": [-5.5, 11, 0.5],
+					"cubes": [
+						{"origin": [-8, 0, -2.5], "size": [5, 11, 5], "uv": [44, 52]}
+					]
+				},
+				{
+					"name": "LegLeft",
+					"parent": "root",
+					"pivot": [5.5, 11, 0.5]
+				},
+				{
+					"name": "rotation",
+					"parent": "LegLeft",
+					"pivot": [5.5, 11, 0.5],
+					"cubes": [
+						{"origin": [3, 4, -2.5], "size": [5, 7, 5], "uv": [44, 68], "mirror": true},
+						{"origin": [4.5, 0, -1], "size": [2, 4, 2], "uv": [44, 80], "mirror": true}
+					]
+				}
+			]
+		}
+	]
+}
