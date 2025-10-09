@@ -7,6 +7,7 @@ import net.minecraft.entity.attribute.*;
 import net.minecraft.entity.data.*;
 import net.minecraft.entity.mob.*;
 import net.minecraft.item.*;
+import net.minecraft.sound.*;
 import net.minecraft.util.*;
 import net.minecraft.world.*;
 import software.bernie.geckolib.animatable.*;
@@ -51,7 +52,7 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     protected void initDataTracker(DataTracker.Builder builder) {
         super.initDataTracker(builder);
         builder.add(TNT_ACTIVE, false);
-        builder.add(TNT_FUSE, 80);
+        builder.add(TNT_FUSE, 100);
 
     }
 
@@ -70,34 +71,36 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     @Override
     public void tick() {
 
-        super.tick();
 
-        if (isTntBombing()) {
-            if (getFuse() >= 1) {
-                decreaseFuse();
-            } else {
-                explode();
+
+
+        if (this.isAlive()) {
+            if (getHealth() <= 10) {
+                setTntBombing();
+            }
+
+            if (isTntBombing()) {
+                if (getFuse() >= 1) {
+                    decreaseFuse();
+                } else if (getFuse() == 0) {
+                    explode();
+                }
+
+                if (getFuse() == 99) {
+                    this.playSound(SoundEvents.ENTITY_TNT_PRIMED);
+                }
+
             }
         }
-    }
-
-    @Override
-    protected void convertInWater() {
+        super.tick();
 
     }
 
-    @Override
-    protected boolean canConvertInWater() {
-        return false;
-    }
 
-    @Override
-    public boolean isConvertingInWater() {
-        return false;
-    }
 
     public void explode() {
-        this.getWorld().createExplosion(this, getX(), getY(), getZ(), 1, World.ExplosionSourceType.TNT);
+        this.getWorld().createExplosion(this, getX(), getY(), getZ(), 3, World.ExplosionSourceType.TNT);
+        this.kill();
 
     }
 
@@ -125,29 +128,18 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
 
     private PlayState predicate(AnimationState<DeadBeardEntity> event) {
 
-
-        if (event.isMoving()) {
-
-
-            return event.setAndContinue(WALK_ANIM_OTHER);
-
+        if (isTntBombing()) {
+            return event.setAndContinue(TNT_DEATH);
         }
 
-
-        return event.setAndContinue(TNT_DEATH);
+        return event.setAndContinue(IDLE_OTHER);
 
         
     }
 
 
 
-    @Override
-    public void swingHand(Hand hand) {
-        if (!this.handSwinging || this.handSwingTicks >= this.getHandSwingDuration() / 2 || this.handSwingTicks < 0) {
-            this.triggerAnim("controller", "attack");
-        }
 
-    }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
@@ -173,5 +165,21 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
 
     public void decreaseFuse() {
         setFuse(getFuse() - 1);
+    }
+
+
+    @Override
+    protected void convertInWater() {
+
+    }
+
+    @Override
+    protected boolean canConvertInWater() {
+        return false;
+    }
+
+    @Override
+    public boolean isConvertingInWater() {
+        return false;
     }
 }
