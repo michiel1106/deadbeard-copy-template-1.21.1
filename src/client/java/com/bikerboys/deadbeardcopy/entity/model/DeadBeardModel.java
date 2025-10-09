@@ -1,18 +1,12 @@
 package com.bikerboys.deadbeardcopy.entity.model;
 
 import com.bikerboys.deadbeardcopy.*;
-import com.bikerboys.deadbeardcopy.entities.*;
-import net.minecraft.client.model.*;
-import net.minecraft.client.render.*;
-import net.minecraft.client.render.entity.model.*;
-import net.minecraft.client.util.math.*;
-import net.minecraft.entity.*;
+import com.bikerboys.deadbeardcopy.entities.deadbeard.*;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.*;
 import software.bernie.geckolib.constant.*;
-import software.bernie.geckolib.constant.dataticket.*;
 import software.bernie.geckolib.model.*;
 import software.bernie.geckolib.model.data.*;
 
