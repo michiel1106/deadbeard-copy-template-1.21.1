@@ -18,6 +18,7 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
     public static final TrackedData<Integer> TARGET_ID = DataTracker.registerData(SkeletonPirateEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
     public boolean isAnimatingMoving;
+    public double animationTick;
 
     protected static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("SkeletonSwabbie_Idle");
     protected static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("SkeletonSwabbie_Walk");
@@ -90,14 +91,17 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
     }
 
     private PlayState predicate(AnimationState<SkeletonPirateEntity> event) {
-
+        animationTick = event.getAnimationTick();
 
 
 
         if (this.getClientTarget() != null) {
             if (event.isMoving()) {
                 isAnimatingMoving = event.isCurrentAnimation(SPRINT_ANIM) && event.isMoving();
+
                 return event.setAndContinue(SPRINT_ANIM);
+
+
 
             }
         }

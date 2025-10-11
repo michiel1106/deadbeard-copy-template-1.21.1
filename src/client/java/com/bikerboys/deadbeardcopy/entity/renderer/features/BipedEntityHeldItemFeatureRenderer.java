@@ -38,16 +38,13 @@ public class BipedEntityHeldItemFeatureRenderer<T extends LivingEntity & GeoAnim
     }
 
     @Override
-    protected void renderStackForBone(MatrixStack poseStack, GeoBone bone, ItemStack stack, T animatable,
-                                      VertexConsumerProvider bufferSource, float partialTick, int packedLight, int packedOverlay) {
+    protected void renderStackForBone(MatrixStack poseStack, GeoBone bone, ItemStack stack, T animatable, VertexConsumerProvider bufferSource, float partialTick, int packedLight, int packedOverlay) {
 
         if (stack.isEmpty()) return;
 
         poseStack.push();
 
-
         poseStack.multiply(RotationAxis.POSITIVE_Z.rotation(-bone.getRotZ()));
-        poseStack.multiply(RotationAxis.POSITIVE_Y.rotation(-bone.getRotY()));
         poseStack.multiply(RotationAxis.POSITIVE_X.rotation(-bone.getRotX()));
 
 
@@ -56,29 +53,12 @@ public class BipedEntityHeldItemFeatureRenderer<T extends LivingEntity & GeoAnim
         poseStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
         poseStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f));
 
-        // --- Step 3: Translate to hand position (tune these offsets to your model) ---
         if (bone.getName().equals("ArmRight") || bone.getName().equals("right_arm")) {
-            poseStack.translate(-0.05F, 0.15F, 0.55F);
-
-            if (animatable instanceof SkeletonPirateEntity skeletonPirateEntity) {
-                if (skeletonPirateEntity.getClientTarget() != null && skeletonPirateEntity.isAnimatingMoving) {
-
-
-                    MinecraftClient.getInstance().player.sendMessage(Text.literal(bone.getRotX() + " " + bone.getRotY() + " " + bone.getRotZ()), true);
-
-                }
-            }
-
+            poseStack.translate(-0.0F, 0.15F, 0.55F);
         } else if (bone.getName().equals("ArmLeft") || bone.getName().equals("left_arm")) {
             poseStack.translate(0.05F, 0.15F, 0.55F);
-
-
-
         }
 
-
-
-        // --- Step 4: Render the item in this corrected orientation ---
         super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);
 
         poseStack.pop();
