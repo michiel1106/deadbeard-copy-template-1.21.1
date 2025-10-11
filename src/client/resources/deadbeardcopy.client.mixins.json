@@ -1,9 +1,9 @@
 {
 	"required": true,
-	"package": "com.bikerboys.deadbeardcopy.mixin.client",
+	"package": "com.bikerboys.deadbeardcopy.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"ExampleClientMixin"
+
 	],
 	"injectors": {
 		"defaultRequire": 1

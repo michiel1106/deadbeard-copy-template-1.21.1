@@ -1,14 +1,12 @@
-package com.bikerboys.deadbeardcopy.entities.deadbeard;
+package com.bikerboys.deadbeardcopy.entities;
 
 
-import com.bikerboys.deadbeardcopy.entities.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.*;
 import net.minecraft.entity.data.*;
 import net.minecraft.entity.mob.*;
 import net.minecraft.item.*;
 import net.minecraft.sound.*;
-import net.minecraft.util.*;
 import net.minecraft.world.*;
 import software.bernie.geckolib.animatable.*;
 import software.bernie.geckolib.animatable.instance.*;
@@ -70,26 +68,19 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
 
     @Override
     public void tick() {
-
-
-
-
         if (this.isAlive()) {
             if (getHealth() <= 10) {
                 setTntBombing();
             }
-
             if (isTntBombing()) {
                 if (getFuse() >= 1) {
                     decreaseFuse();
                 } else if (getFuse() == 0) {
                     explode();
                 }
-
                 if (getFuse() == 99) {
                     this.playSound(SoundEvents.ENTITY_TNT_PRIMED);
                 }
-
             }
         }
         super.tick();
@@ -101,13 +92,7 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     public void explode() {
         this.getWorld().createExplosion(this, getX(), getY(), getZ(), 3, World.ExplosionSourceType.TNT);
         this.kill();
-
     }
-
-
-
-
-
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
@@ -117,8 +102,6 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     @Override
     protected void attackLivingEntity(LivingEntity target) {
         super.attackLivingEntity(target);
-
-
     }
 
     @Override

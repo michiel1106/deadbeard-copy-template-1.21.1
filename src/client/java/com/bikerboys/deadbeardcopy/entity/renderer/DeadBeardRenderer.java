@@ -1,7 +1,7 @@
 package com.bikerboys.deadbeardcopy.entity.renderer;
 
 import com.bikerboys.deadbeardcopy.*;
-import com.bikerboys.deadbeardcopy.entities.deadbeard.*;
+import com.bikerboys.deadbeardcopy.entities.*;
 import com.bikerboys.deadbeardcopy.entity.model.*;
 import com.bikerboys.deadbeardcopy.entity.renderer.features.*;
 import net.minecraft.client.render.*;
@@ -15,7 +15,7 @@ public class DeadBeardRenderer extends GeoEntityRenderer<DeadBeardEntity> {
     public DeadBeardRenderer(EntityRendererFactory.Context context) {
         super(context, new DeadBeardModel());
         this.addRenderLayer(new TntFeatureRenderer(this));
-        this.addRenderLayer(new HeldItemFeatureRenderer<DeadBeardEntity>(this));
+        this.addRenderLayer(new DeadBeardHeldItemFeatureRenderer<DeadBeardEntity>(this));
     }
 
 

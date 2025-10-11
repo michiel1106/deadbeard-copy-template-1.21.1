@@ -20,5 +20,7 @@ public class DeadbeardCopyClient implements ClientModInitializer {
 
 
 		EntityRendererRegistry.register(ModCustomEntities.DEADBEARD, (DeadBeardRenderer::new));
+		EntityRendererRegistry.register(ModCustomEntities.SKELETON_PIRATE, (SkeletonPirateRenderer::new));
+		EntityRendererRegistry.register(ModCustomEntities.ZOMBIE_PIRATE, (ZombiePirateRenderer::new));
 	}
 }

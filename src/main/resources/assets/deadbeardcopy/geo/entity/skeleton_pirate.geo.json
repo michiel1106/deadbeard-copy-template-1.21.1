@@ -1,0 +1,74 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.skeletonpirate",
+				"texture_width": 41,
+				"texture_height": 59,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "root",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "Body",
+					"parent": "root",
+					"pivot": [0, 12, 0],
+					"cubes": [
+						{"origin": [-4, 14, -2], "size": [8, 10, 4], "uv": [0, 16]},
+						{"origin": [-4, 12, -2], "size": [8, 2, 4], "uv": [0, 30]}
+					]
+				},
+				{
+					"name": "Head",
+					"parent": "Body",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-4, 24, -4], "size": [8, 8, 8], "uv": [0, 0]},
+						{"origin": [0, 27, 4], "size": [5, 2, 0], "pivot": [0, 28, 4], "rotation": [0, -42.5, 30], "uv": [25, 3]},
+						{"origin": [0, 27, 4], "size": [5, 2, 0], "pivot": [0, 28, 4], "rotation": [-167.26585, -42.5, 150], "uv": [25, 0]}
+					]
+				},
+				{
+					"name": "ArmRight",
+					"parent": "Body",
+					"pivot": [-5, 23, 0],
+					"cubes": [
+						{"origin": [-6, 12, -1], "size": [2, 12, 2], "uv": [24, 16]}
+					]
+				},
+				{
+					"name": "ArmLeft",
+					"parent": "Body",
+					"pivot": [5, 23, 0],
+					"cubes": [
+						{"origin": [4, 12, -1], "size": [2, 12, 2], "uv": [33, 16], "mirror": true}
+					]
+				},
+				{
+					"name": "LegRight",
+					"parent": "root",
+					"pivot": [-2, 12, 0],
+					"cubes": [
+						{"origin": [-3, 0, -1], "size": [2, 12, 2], "uv": [0, 45]},
+						{"origin": [-4, 7, -2], "size": [4, 5, 4], "uv": [0, 36]}
+					]
+				},
+				{
+					"name": "LegLeft",
+					"parent": "root",
+					"pivot": [2, 12, 0],
+					"cubes": [
+						{"origin": [1, 0, -1], "size": [2, 12, 2], "uv": [17, 45]},
+						{"origin": [0, 7, -2], "size": [4, 5, 4], "uv": [17, 36]}
+					]
+				}
+			]
+		}
+	]
+}
