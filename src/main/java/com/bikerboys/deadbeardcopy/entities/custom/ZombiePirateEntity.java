@@ -1,11 +1,14 @@
 package com.bikerboys.deadbeardcopy.entities.custom;
 
+import com.bikerboys.deadbeardcopy.entities.*;
 import com.bikerboys.deadbeardcopy.items.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.*;
+import net.minecraft.entity.damage.*;
 import net.minecraft.entity.data.*;
 import net.minecraft.entity.mob.*;
 import net.minecraft.item.*;
+import net.minecraft.nbt.*;
 import net.minecraft.util.math.random.*;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.*;
@@ -17,6 +20,9 @@ import software.bernie.geckolib.util.*;
 
 public class ZombiePirateEntity extends ZombieEntity implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+
+    private int timeTillDeath = 600;
+    private int dyingTimer = 20;
 
     public static final TrackedData<Integer> TARGET_ID = DataTracker.registerData(ZombiePirateEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
@@ -30,7 +36,24 @@ public class ZombiePirateEntity extends ZombieEntity implements GeoEntity {
     }
 
 
+    public ZombiePirateEntity(World world) {
+        super(ModCustomEntities.ZOMBIE_PIRATE, world);
+    }
 
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (timeTillDeath > 0) {
+            timeTillDeath--;
+        } else {
+            // Only start "dying" after countdown hits 0
+            if (dyingTimer-- <= 0) {
+                this.damage(getWorld().getDamageSources().magic(), 2);
+                dyingTimer = 20; // Repeat damage every 10 ticks
+            }
+        }
+    }
 
     @Override
     protected void initDataTracker(DataTracker.Builder builder) {
@@ -43,6 +66,19 @@ public class ZombiePirateEntity extends ZombieEntity implements GeoEntity {
         controllerRegistrar.add(new AnimationController<>(this, "controller", 3, this::predicate).triggerableAnim("attack", ATTACK_ANIM));
     }
 
+    @Override
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        nbt.putInt("timeTillDeath", this.timeTillDeath);
+        nbt.putInt("dyingTimer", this.dyingTimer);
+    }
+
+    @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
+        this.timeTillDeath = nbt.contains("timeTillDeath") ? nbt.getInt("timeTillDeath") : 600;
+        this.dyingTimer = nbt.contains("dyingTimer") ? nbt.getInt("dyingTimer") : 20;
+    }
 
     @Override
     protected void initEquipment(Random random, LocalDifficulty localDifficulty) {

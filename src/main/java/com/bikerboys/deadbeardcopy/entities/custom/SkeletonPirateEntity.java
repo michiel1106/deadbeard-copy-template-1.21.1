@@ -1,10 +1,12 @@
 package com.bikerboys.deadbeardcopy.entities.custom;
 
+import com.bikerboys.deadbeardcopy.entities.*;
 import com.bikerboys.deadbeardcopy.items.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.data.*;
 import net.minecraft.entity.mob.*;
 import net.minecraft.item.*;
+import net.minecraft.nbt.*;
 import net.minecraft.util.math.random.*;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.*;
@@ -18,6 +20,9 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public static final TrackedData<Integer> TARGET_ID = DataTracker.registerData(SkeletonPirateEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
+    private int timeTillDeath = 600;
+    private int dyingTimer = 20;
+
     protected static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("SkeletonSwabbie_Idle");
     protected static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("SkeletonSwabbie_Walk");
     protected static final RawAnimation SPRINT_ANIM = RawAnimation.begin().thenLoop("SkeletonSwabbie_Sprint");
@@ -27,8 +32,42 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
         super(entityType, world);
     }
 
+    public SkeletonPirateEntity(World world) {
+        super(ModCustomEntities.SKELETON_PIRATE, world);
+    }
+
     protected void initEquipment(Random random, LocalDifficulty localDifficulty) {
         this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOLD_CUTLASS));
+        this.equipStack(EquipmentSlot.OFFHAND, new ItemStack(ModItems.GOLD_CUTLASS));
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (timeTillDeath > 0) {
+            timeTillDeath--;
+        } else {
+            // Only start "dying" after countdown hits 0
+            if (dyingTimer-- <= 0) {
+                this.damage(getWorld().getDamageSources().magic(), 2);
+                dyingTimer = 20; // Repeat damage every 10 ticks
+            }
+        }
+    }
+
+    @Override
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        nbt.putInt("timeTillDeath", this.timeTillDeath);
+        nbt.putInt("dyingTimer", this.dyingTimer);
+    }
+
+    @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
+        this.timeTillDeath = nbt.contains("timeTillDeath") ? nbt.getInt("timeTillDeath") : 600;
+        this.dyingTimer = nbt.contains("dyingTimer") ? nbt.getInt("dyingTimer") : 20;
     }
 
     @Override

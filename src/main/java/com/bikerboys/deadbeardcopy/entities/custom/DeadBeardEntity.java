@@ -2,12 +2,16 @@ package com.bikerboys.deadbeardcopy.entities.custom;
 
 
 import com.bikerboys.deadbeardcopy.entities.*;
+import com.bikerboys.deadbeardcopy.items.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.*;
+import net.minecraft.entity.damage.*;
 import net.minecraft.entity.data.*;
 import net.minecraft.entity.mob.*;
 import net.minecraft.item.*;
+import net.minecraft.nbt.*;
 import net.minecraft.sound.*;
+import net.minecraft.util.math.*;
 import net.minecraft.world.*;
 import software.bernie.geckolib.animatable.*;
 import software.bernie.geckolib.animatable.instance.*;
@@ -15,11 +19,17 @@ import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.util.*;
 
+import java.util.*;
+
 public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
+    private boolean spawnLoot = false;
     private static final TrackedData<Boolean> TNT_ACTIVE = DataTracker.registerData(DeadBeardEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Integer> TNT_FUSE = DataTracker.registerData(DeadBeardEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private final Random random = new Random();
+
+    private int spawnCooldown = 400;
 
     protected static final RawAnimation IDLE_OTHER = RawAnimation.begin().thenLoop("idle");
     protected static final RawAnimation ATTACK_ANIM_OTHER = RawAnimation.begin().then("attack", Animation.LoopType.PLAY_ONCE);
@@ -27,15 +37,12 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
 
     public DeadBeardEntity(EntityType<? extends ZombieEntity> entityType, World world) {
         super(entityType, world);
-        this.activeItemStack = new ItemStack(Items.STONE_SWORD);
-
-
-
+        this.activeItemStack = new ItemStack(ModItems.STONE_CUTLASS);
     }
 
     public DeadBeardEntity(World world) {
         super(ModCustomEntities.DEADBEARD, world);
-        this.activeItemStack = new ItemStack(Items.STONE_SWORD);
+        this.activeItemStack = new ItemStack(ModItems.STONE_CUTLASS);
 
     }
 
@@ -48,6 +55,39 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
 
     }
 
+    @Override
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+
+        nbt.putBoolean("tnt_active", isTntBombing());
+        nbt.putInt("tnt_fuse", dataTracker.get(TNT_FUSE));
+        nbt.putInt("spawn_cooldown", spawnCooldown);
+
+        nbt.putBoolean("spawn_loot", spawnLoot);
+
+    }
+
+
+
+
+    @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
+
+
+        setTntBombing(nbt.getBoolean("tnt_active"));
+        setFuse(nbt.getInt("tnt_fuse"));
+
+        this.spawnCooldown = nbt.contains("spawn_cooldown") ? nbt.getInt("spawn_cooldown") : random.nextInt(1200, 1500);
+
+        setTntBombing(nbt.contains("tnt_active") ? nbt.getBoolean("tnt_active") : false);
+
+        setFuse(nbt.contains("tnt_fuse") ? nbt.getInt("tnt_fuse") : 100);
+
+
+        this.spawnLoot = nbt.contains("spawn_loot") ? nbt.getBoolean("spawn_loot") : true;
+    }
+
 
 
     public static DefaultAttributeContainer.Builder setAttributes() {
@@ -57,14 +97,14 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0)
                 .add(EntityAttributes.GENERIC_ARMOR, 2.0)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 70.0)
-                .add(EntityAttributes.ZOMBIE_SPAWN_REINFORCEMENTS);
+                .add(EntityAttributes.ZOMBIE_SPAWN_REINFORCEMENTS, 0);
     }
 
     @Override
     public void tick() {
         if (this.isAlive()) {
             if (getHealth() <= 10) {
-                setTntBombing();
+                setTntBombing(true);
             }
             if (isTntBombing()) {
                 if (getFuse() >= 1) {
@@ -76,16 +116,114 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
                     this.playSound(SoundEvents.ENTITY_TNT_PRIMED);
                 }
             }
+
+
+            if (this.spawnCooldown > 0) {
+                spawnCooldown--;
+            }
+            if (spawnCooldown == 0) {
+                spawnLackeys();
+                spawnCooldown = random.nextInt(1200, 1500);
+            }
+
         }
+
         super.tick();
 
     }
 
 
+    @Override
+    protected void initEquipment(net.minecraft.util.math.random.Random random, LocalDifficulty localDifficulty) {
+        equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.STONE_CUTLASS));
+    }
+
+    @Override
+    public void setBaby(boolean baby) {
+    }
+
+
+
+    @Override
+    public void takeKnockback(double strength, double x, double z) {
+
+    }
+
+    public void spawnLackeys() {
+
+        int skeleLackeys = 0;
+        int zombieLackeys = 0;
+
+        skeleLackeys = random.nextInt(2, 4);
+        zombieLackeys = random.nextInt(2, 4);
+
+        for (int i = 0; i < skeleLackeys; i++) {
+            SkeletonPirateEntity skeletonPirateEntity = new SkeletonPirateEntity(getWorld());
+
+
+            double x = this.getX();
+
+            double z = this.getZ();
+
+            double newx = random.nextDouble(-2, i + i);
+
+            double newz = random.nextDouble(-2, i + i);
+
+            x += newx;
+            z += newz;
+
+            skeletonPirateEntity.setPos(x, this.getY(), z);
+            skeletonPirateEntity.initEquipment(net.minecraft.util.math.random.Random.create(), getWorld().getLocalDifficulty(getBlockPos()));
+
+            getWorld().spawnEntity(skeletonPirateEntity);
+        }
+
+        for (int i = 0; i < zombieLackeys; i++) {
+            ZombiePirateEntity zombiePirateEntity = new ZombiePirateEntity(getWorld());
+
+            double x = this.getX();
+
+            double z = this.getZ();
+
+            double newx = random.nextDouble(-2, i + i);
+
+            double newz = random.nextDouble(-2, i + i);
+
+            x += newx;
+            z += newz;
+
+            zombiePirateEntity.setPos(x, this.getY(), z);
+            zombiePirateEntity.initEquipment(net.minecraft.util.math.random.Random.create(), getWorld().getLocalDifficulty(getBlockPos()));
+
+            getWorld().spawnEntity(zombiePirateEntity);
+        }
+
+
+    }
+
+
+    @Override
+    protected void initAttributes() {
+
+
+
+    }
 
     public void explode() {
         this.getWorld().createExplosion(this, getX(), getY(), getZ(), 3, World.ExplosionSourceType.TNT);
+
+        this.spawnLoot = false;
+
+
         this.kill();
+
+    }
+
+    @Override
+    protected void dropLoot(DamageSource damageSource, boolean causedByPlayer) {
+        if (spawnLoot) {
+            super.dropLoot(damageSource, causedByPlayer);
+        }
     }
 
     @Override
@@ -128,8 +266,8 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
         return this.getDataTracker().get(TNT_ACTIVE);
     }
 
-    public void setTntBombing() {
-        this.getDataTracker().set(TNT_ACTIVE, true);
+    public void setTntBombing(boolean val) {
+        this.getDataTracker().set(TNT_ACTIVE, val);
     }
 
     public int getFuse() {
