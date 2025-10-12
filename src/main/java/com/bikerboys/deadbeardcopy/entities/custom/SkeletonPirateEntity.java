@@ -1,5 +1,6 @@
-package com.bikerboys.deadbeardcopy.entities;
+package com.bikerboys.deadbeardcopy.entities.custom;
 
+import com.bikerboys.deadbeardcopy.items.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.data.*;
 import net.minecraft.entity.mob.*;
@@ -17,9 +18,6 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public static final TrackedData<Integer> TARGET_ID = DataTracker.registerData(SkeletonPirateEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
-    public boolean isAnimatingMoving;
-    public double animationTick;
-
     protected static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("SkeletonSwabbie_Idle");
     protected static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("SkeletonSwabbie_Walk");
     protected static final RawAnimation SPRINT_ANIM = RawAnimation.begin().thenLoop("SkeletonSwabbie_Sprint");
@@ -30,12 +28,12 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
     }
 
     protected void initEquipment(Random random, LocalDifficulty localDifficulty) {
-        this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
+        this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOLD_CUTLASS));
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>(this, "controller", 5, this::predicate).triggerableAnim("attack", ATTACK_ANIM));
+        controllerRegistrar.add(new AnimationController<>(this, "controller", 3, this::predicate).triggerableAnim("attack", ATTACK_ANIM));
 
     }
 
@@ -43,7 +41,6 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
     protected void initDataTracker(DataTracker.Builder builder) {
         super.initDataTracker(builder);
         builder.add(TARGET_ID, -1);
-
     }
 
     @Override
@@ -69,48 +66,23 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
     @Override
     public boolean tryAttack(Entity target) {
         boolean b = super.tryAttack(target);
-
         if (b) {
             triggerAnim("controller", "attack");
         }
-
         return b;
 
     }
 
-    @Override
-    public void onAttacking(Entity target) {
-        super.onAttacking(target);
-
-    }
-
-    @Override
-    public void tick() {
-
-        super.tick();
-    }
-
     private PlayState predicate(AnimationState<SkeletonPirateEntity> event) {
-        animationTick = event.getAnimationTick();
-
-
-
         if (this.getClientTarget() != null) {
             if (event.isMoving()) {
-                isAnimatingMoving = event.isCurrentAnimation(SPRINT_ANIM) && event.isMoving();
-
                 return event.setAndContinue(SPRINT_ANIM);
-
-
-
             }
         }
 
         if (event.isMoving()) {
             return event.setAndContinue(WALK_ANIM);
         }
-
-
 
         return event.setAndContinue(IDLE_ANIM);
     }
@@ -119,7 +91,6 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
     }
-
 
     @Override
     protected void convertToStray() {
@@ -137,6 +108,5 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
 
     @Override
     public void shootAt(LivingEntity target, float pullProgress) {
-
     }
 }

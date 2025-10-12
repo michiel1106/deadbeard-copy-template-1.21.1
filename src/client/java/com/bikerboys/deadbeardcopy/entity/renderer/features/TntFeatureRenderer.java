@@ -1,6 +1,6 @@
 package com.bikerboys.deadbeardcopy.entity.renderer.features;
 
-import com.bikerboys.deadbeardcopy.entities.*;
+import com.bikerboys.deadbeardcopy.entities.custom.*;
 import net.minecraft.block.*;
 import net.minecraft.client.*;
 import net.minecraft.client.render.*;

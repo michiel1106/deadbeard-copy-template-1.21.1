@@ -1,6 +1,7 @@
 package com.bikerboys.deadbeardcopy.entity.renderer.features;
 
 import com.bikerboys.deadbeardcopy.entities.*;
+import com.mojang.blaze3d.systems.*;
 import net.minecraft.client.*;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.model.json.*;
@@ -10,6 +11,7 @@ import net.minecraft.item.*;
 import net.minecraft.text.*;
 import net.minecraft.util.math.*;
 import org.jetbrains.annotations.*;
+import org.joml.*;
 import software.bernie.geckolib.animatable.*;
 import software.bernie.geckolib.cache.object.*;
 import software.bernie.geckolib.renderer.*;
@@ -43,20 +45,16 @@ public class BipedEntityHeldItemFeatureRenderer<T extends LivingEntity & GeoAnim
         if (stack.isEmpty()) return;
 
         poseStack.push();
-
-        poseStack.multiply(RotationAxis.POSITIVE_Z.rotation(-bone.getRotZ()));
         poseStack.multiply(RotationAxis.POSITIVE_X.rotation(-bone.getRotX()));
-
-
+        poseStack.multiply(RotationAxis.POSITIVE_Z.rotation(-bone.getRotZ()));
 
 
         poseStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
-        poseStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f));
 
         if (bone.getName().equals("ArmRight") || bone.getName().equals("right_arm")) {
-            poseStack.translate(-0.0F, 0.15F, 0.55F);
+            poseStack.translate(0.0F, 0.20F, -0.60F);
         } else if (bone.getName().equals("ArmLeft") || bone.getName().equals("left_arm")) {
-            poseStack.translate(0.05F, 0.15F, 0.55F);
+            poseStack.translate(0.0F, 0.20F, -0.60F);
         }
 
         super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);

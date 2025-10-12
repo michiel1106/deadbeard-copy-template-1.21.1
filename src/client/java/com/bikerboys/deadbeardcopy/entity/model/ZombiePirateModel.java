@@ -1,7 +1,7 @@
 package com.bikerboys.deadbeardcopy.entity.model;
 
 import com.bikerboys.deadbeardcopy.*;
-import com.bikerboys.deadbeardcopy.entities.*;
+import com.bikerboys.deadbeardcopy.entities.custom.*;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import software.bernie.geckolib.animation.*;

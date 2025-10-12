@@ -2,6 +2,7 @@ package com.bikerboys.deadbeardcopy.entities;
 
 import com.bikerboys.deadbeardcopy.*;
 
+import com.bikerboys.deadbeardcopy.entities.custom.*;
 import net.fabricmc.fabric.api.object.builder.v1.entity.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.*;
@@ -27,8 +28,8 @@ public class ModCustomEntities {
             Identifier.of(DeadbeardCopy.MOD_ID, "skeleton_pirate"),
             EntityType.Builder.<SkeletonPirateEntity>create(SkeletonPirateEntity::new, SpawnGroup.MONSTER)
                     .dimensions(0.6F, 1.99F)
-                    .eyeHeight(1.74F
-                    ).vehicleAttachment(-0.7F)
+                    .eyeHeight(1.74F)
+                    .vehicleAttachment(-0.7F)
                     .maxTrackingRange(8)
 
                     .build("deadbeard")
@@ -51,7 +52,7 @@ public class ModCustomEntities {
     public static void registerAttributes() {
         FabricDefaultAttributeRegistry.register(DEADBEARD, DeadBeardEntity.setAttributes());
         FabricDefaultAttributeRegistry.register(SKELETON_PIRATE, AbstractSkeletonEntity.createAbstractSkeletonAttributes());
-        FabricDefaultAttributeRegistry.register(ZOMBIE_PIRATE, ZombieEntity.createZombieAttributes());
+        FabricDefaultAttributeRegistry.register(ZOMBIE_PIRATE, ZombiePirateEntity.createZombiePirateAttributes());
 
     }
 

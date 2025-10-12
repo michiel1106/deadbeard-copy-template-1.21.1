@@ -1,6 +1,7 @@
-package com.bikerboys.deadbeardcopy.entities;
+package com.bikerboys.deadbeardcopy.entities.custom;
 
 
+import com.bikerboys.deadbeardcopy.entities.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.*;
 import net.minecraft.entity.data.*;
@@ -20,14 +21,7 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     private static final TrackedData<Boolean> TNT_ACTIVE = DataTracker.registerData(DeadBeardEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Integer> TNT_FUSE = DataTracker.registerData(DeadBeardEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
-
-    protected static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("Deadbeard_walkNormal");
-    protected static final RawAnimation WALK_AGGRO_ANIM = RawAnimation.begin().thenLoop("Deadbeard_walkAggro");
-    protected static final RawAnimation WALK_ANIM_OTHER = RawAnimation.begin().thenLoop("walk");
-    protected static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("Deadbeard_IdleNormal");
-    protected static final RawAnimation IDLE_AGRO = RawAnimation.begin().thenLoop("Deadbeard_IdleAggro");
     protected static final RawAnimation IDLE_OTHER = RawAnimation.begin().thenLoop("idle");
-    protected static final RawAnimation ATTACK_ANIM = RawAnimation.begin().then("Deadbeard_attack", Animation.LoopType.PLAY_ONCE);
     protected static final RawAnimation ATTACK_ANIM_OTHER = RawAnimation.begin().then("attack", Animation.LoopType.PLAY_ONCE);
     protected static final RawAnimation TNT_DEATH = RawAnimation.begin().thenLoop("tnt");
 

@@ -1,7 +1,7 @@
 package com.bikerboys.deadbeardcopy.entity.model;
 
 import com.bikerboys.deadbeardcopy.*;
-import com.bikerboys.deadbeardcopy.entities.*;
+import com.bikerboys.deadbeardcopy.entities.custom.*;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import software.bernie.geckolib.animation.*;
@@ -44,27 +44,6 @@ public class SkeletonPirateModel extends GeoModel<SkeletonPirateEntity> {
             head.setRotX(data.headPitch() * MathHelper.RADIANS_PER_DEGREE);
             head.setRotY(data.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
         }
-
-        /*
-
-        float limbSwing = animatable.limbAnimator.getPos(animationState.getPartialTick());
-        float limbSwingAmount = animatable.limbAnimator.getSpeed(animationState.getPartialTick());
-        if (limbSwingAmount > 1.0F) limbSwingAmount = 1.0F;
-
-        float walkSpeed = 1F;
-        float swing = MathHelper.cos(limbSwing * walkSpeed) * 1.4F * limbSwingAmount;
-        float swingOpposite = MathHelper.cos(limbSwing * walkSpeed + (float)Math.PI) * 1.4F * limbSwingAmount;
-
-
-
-        if (rightArm != null) rightArm.setRotX(swing);
-        if (leftArm != null) leftArm.setRotX(swingOpposite);
-
-
-        if (rightLeg != null) rightLeg.setRotX(swingOpposite);
-        if (leftLeg != null) leftLeg.setRotX(swing);
-
-         */
 
     }
 
