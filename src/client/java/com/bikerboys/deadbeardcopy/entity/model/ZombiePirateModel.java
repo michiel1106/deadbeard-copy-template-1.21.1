@@ -11,6 +11,7 @@ import software.bernie.geckolib.model.*;
 import software.bernie.geckolib.model.data.*;
 
 public class ZombiePirateModel extends GeoModel<ZombiePirateEntity> {
+
     @Override
     public Identifier getModelResource(ZombiePirateEntity zombiePirateEntity) {
         return Identifier.of(DeadbeardCopy.MOD_ID, "geo/zombie_pirate.geo.json");

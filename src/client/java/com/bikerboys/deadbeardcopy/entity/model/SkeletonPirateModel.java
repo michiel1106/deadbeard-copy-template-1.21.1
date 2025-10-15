@@ -11,6 +11,7 @@ import software.bernie.geckolib.model.*;
 import software.bernie.geckolib.model.data.*;
 
 public class SkeletonPirateModel extends GeoModel<SkeletonPirateEntity> {
+
     @Override
     public Identifier getModelResource(SkeletonPirateEntity skeletonPirateEntity) {
         return Identifier.of(DeadbeardCopy.MOD_ID, "geo/skeleton_pirate.geo.json");
@@ -26,13 +27,8 @@ public class SkeletonPirateModel extends GeoModel<SkeletonPirateEntity> {
         return Identifier.of(DeadbeardCopy.MOD_ID, "animations/skeleton_pirate.animation.json");
     }
 
-
-
-
     @Override
     public void setCustomAnimations(SkeletonPirateEntity animatable, long instanceId, AnimationState<SkeletonPirateEntity> animationState) {
-
-
         GeoBone rightArm = getAnimationProcessor().getBone("ArmRight");
         GeoBone leftArm = getAnimationProcessor().getBone("ArmLeft");
         GeoBone rightLeg = getAnimationProcessor().getBone("LegRight");
@@ -44,8 +40,5 @@ public class SkeletonPirateModel extends GeoModel<SkeletonPirateEntity> {
             head.setRotX(data.headPitch() * MathHelper.RADIANS_PER_DEGREE);
             head.setRotY(data.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
         }
-
     }
-
-
 }

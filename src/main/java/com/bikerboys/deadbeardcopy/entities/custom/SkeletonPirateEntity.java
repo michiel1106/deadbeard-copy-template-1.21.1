@@ -21,10 +21,8 @@ import software.bernie.geckolib.util.*;
 public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public static final TrackedData<Integer> TARGET_ID = DataTracker.registerData(SkeletonPirateEntity.class, TrackedDataHandlerRegistry.INTEGER);
-
     private int timeTillDeath = 600;
     private int dyingTimer = 20;
-
     protected static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("SkeletonSwabbie_Idle");
     protected static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("SkeletonSwabbie_Walk");
     protected static final RawAnimation SPRINT_ANIM = RawAnimation.begin().thenLoop("SkeletonSwabbie_Sprint");
@@ -39,8 +37,6 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
         super.initGoals();
         goalSelector.add(1, new SwimGoal(this));
         goalSelector.add(6, new FollowDeadbeardGoal(this, 1.0f));
-
-
     }
 
     public SkeletonPirateEntity(World world) {
@@ -55,11 +51,9 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
-
         if (timeTillDeath > 0) {
             timeTillDeath--;
         } else {
-
             if (dyingTimer-- <= 0) {
                 this.damage(getWorld().getDamageSources().magic(), 2);
                 dyingTimer = 20;
@@ -84,7 +78,6 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
         controllerRegistrar.add(new AnimationController<>(this, "controller", 3, this::predicate).triggerableAnim("attack", ATTACK_ANIM));
-
     }
 
     @Override
@@ -97,7 +90,6 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
     protected boolean isAffectedByDaylight() {
         return false;
     }
-
 
     @Nullable
     public LivingEntity getClientTarget() {
@@ -115,12 +107,11 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
 
     @Override
     public boolean tryAttack(Entity target) {
-        boolean b = super.tryAttack(target);
-        if (b) {
+        boolean tryAttack = super.tryAttack(target);
+        if (tryAttack) {
             triggerAnim("controller", "attack");
         }
-        return b;
-
+        return tryAttack;
     }
 
     private PlayState predicate(AnimationState<SkeletonPirateEntity> event) {
@@ -129,11 +120,9 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
                 return event.setAndContinue(SPRINT_ANIM);
             }
         }
-
         if (event.isMoving()) {
             return event.setAndContinue(WALK_ANIM);
         }
-
         return event.setAndContinue(IDLE_ANIM);
     }
 
@@ -154,7 +143,6 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
     @Override
     public void setConverting(boolean converting) {
     }
-
 
     @Override
     public void shootAt(LivingEntity target, float pullProgress) {

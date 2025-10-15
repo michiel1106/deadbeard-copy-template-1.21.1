@@ -22,12 +22,9 @@ import software.bernie.geckolib.util.*;
 
 public class ZombiePirateEntity extends ZombieEntity implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-
     private int timeTillDeath = 600;
     private int dyingTimer = 20;
-
     public static final TrackedData<Integer> TARGET_ID = DataTracker.registerData(ZombiePirateEntity.class, TrackedDataHandlerRegistry.INTEGER);
-
     protected static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("ZombieSwabbie_Idle");
     protected static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("ZombieSwabble_Walk");
     protected static final RawAnimation SPRINT_ANIM = RawAnimation.begin().thenLoop("ZombieSwabbie_Sprint");
@@ -37,26 +34,16 @@ public class ZombiePirateEntity extends ZombieEntity implements GeoEntity {
         super(entityType, world);
     }
 
-
     public ZombiePirateEntity(World world) {
         super(ModCustomEntities.ZOMBIE_PIRATE, world);
     }
 
-
-
-
-
-
-
-
     @Override
     public void tick() {
         super.tick();
-
         if (timeTillDeath > 0) {
             timeTillDeath--;
         } else {
-
             if (dyingTimer-- <= 0) {
                 this.damage(getWorld().getDamageSources().magic(), 2);
                 dyingTimer = 20;
@@ -70,7 +57,6 @@ public class ZombiePirateEntity extends ZombieEntity implements GeoEntity {
         super.initGoals();
         goalSelector.add(1, new SwimGoal(this));
         goalSelector.add(5, new FollowDeadbeardGoal(this, 1.0f));
-
     }
 
     @Override
@@ -100,7 +86,6 @@ public class ZombiePirateEntity extends ZombieEntity implements GeoEntity {
 
     @Override
     protected void initEquipment(Random random, LocalDifficulty localDifficulty) {
-
         this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModItems.STONE_CUTLASS));
     }
 
@@ -112,20 +97,17 @@ public class ZombiePirateEntity extends ZombieEntity implements GeoEntity {
         return e instanceof LivingEntity le ? le : null;
     }
 
-
     @Override
     public void setTarget(@Nullable LivingEntity target) {
         super.setTarget(target);
         this.getDataTracker().set(TARGET_ID, target == null ? -1 : target.getId());
     }
 
-
     @Override
     public boolean tryAttack(Entity target) {
-        boolean b = super.tryAttack(target);
-        if (b) {triggerAnim("controller", "attack");}
-        return b;
-
+        boolean tryAttack = super.tryAttack(target);
+        if (tryAttack) {triggerAnim("controller", "attack");}
+        return tryAttack;
     }
 
     private PlayState predicate(AnimationState<ZombiePirateEntity> event) {
@@ -137,11 +119,8 @@ public class ZombiePirateEntity extends ZombieEntity implements GeoEntity {
         if (event.isMoving()) {
             return event.setAndContinue(WALK_ANIM);
         }
-
         return event.setAndContinue(IDLE_ANIM);
     }
-
-
 
     public static DefaultAttributeContainer.Builder createZombiePirateAttributes() {
         return HostileEntity.createHostileAttributes()
@@ -152,10 +131,8 @@ public class ZombiePirateEntity extends ZombieEntity implements GeoEntity {
                 .add(EntityAttributes.ZOMBIE_SPAWN_REINFORCEMENTS, 0);
     }
 
-
     @Override
     protected void initAttributes() {
-
     }
 
     @Override
@@ -173,10 +150,8 @@ public class ZombiePirateEntity extends ZombieEntity implements GeoEntity {
         return false;
     }
 
-
     @Override
     public boolean isConvertingInWater() {
         return false;
     }
-
 }

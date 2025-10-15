@@ -24,14 +24,11 @@ import java.util.*;
 
 public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-
     private boolean spawnLoot = false;
     private static final TrackedData<Boolean> TNT_ACTIVE = DataTracker.registerData(DeadBeardEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Integer> TNT_FUSE = DataTracker.registerData(DeadBeardEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private final Random random = new Random();
-
     private int spawnCooldown = 400;
-
     protected static final RawAnimation IDLE_OTHER = RawAnimation.begin().thenLoop("idle");
     protected static final RawAnimation ATTACK_ANIM_OTHER = RawAnimation.begin().then("attack", Animation.LoopType.PLAY_ONCE);
     protected static final RawAnimation TNT_DEATH = RawAnimation.begin().thenLoop("tnt");
@@ -44,28 +41,22 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     public DeadBeardEntity(World world) {
         super(ModCustomEntities.DEADBEARD, world);
         this.activeItemStack = new ItemStack(ModItems.STONE_CUTLASS);
-
     }
-
 
     @Override
     protected void initDataTracker(DataTracker.Builder builder) {
         super.initDataTracker(builder);
         builder.add(TNT_ACTIVE, false);
         builder.add(TNT_FUSE, 100);
-
     }
 
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-
         nbt.putBoolean("tnt_active", isTntBombing());
         nbt.putInt("tnt_fuse", dataTracker.get(TNT_FUSE));
         nbt.putInt("spawn_cooldown", spawnCooldown);
-
         nbt.putBoolean("spawn_loot", spawnLoot);
-
     }
 
 
@@ -74,17 +65,9 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-
-
-        setTntBombing(nbt.getBoolean("tnt_active"));
-        setFuse(nbt.getInt("tnt_fuse"));
-
         this.spawnCooldown = nbt.contains("spawn_cooldown") ? nbt.getInt("spawn_cooldown") : random.nextInt(1200, 1500);
-
         setTntBombing(nbt.contains("tnt_active") ? nbt.getBoolean("tnt_active") : false);
-
         setFuse(nbt.contains("tnt_fuse") ? nbt.getInt("tnt_fuse") : 100);
-
 
         this.spawnLoot = nbt.contains("spawn_loot") ? nbt.getBoolean("spawn_loot") : true;
     }
@@ -118,7 +101,6 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
                 }
             }
 
-
             if (this.spawnCooldown > 0) {
                 spawnCooldown--;
             }
@@ -126,13 +108,9 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
                 spawnLackeys();
                 spawnCooldown = random.nextInt(1200, 1500);
             }
-
         }
-
         super.tick();
-
     }
-
 
     @Override
     protected void initEquipment(net.minecraft.util.math.random.Random random, LocalDifficulty localDifficulty) {
@@ -143,15 +121,11 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     public void setBaby(boolean baby) {
     }
 
-
-
     @Override
     public void takeKnockback(double strength, double x, double z) {
-
     }
 
     public void spawnLackeys() {
-
         int skeleLackeys = 0;
         int zombieLackeys = 0;
 
@@ -160,14 +134,10 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
 
         for (int i = 0; i < skeleLackeys; i++) {
             SkeletonPirateEntity skeletonPirateEntity = new SkeletonPirateEntity(getWorld());
-
-
             double x = this.getX();
-
             double z = this.getZ();
 
             double newx = random.nextDouble(-2, i + i);
-
             double newz = random.nextDouble(-2, i + i);
 
             x += newx;
@@ -181,13 +151,10 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
 
         for (int i = 0; i < zombieLackeys; i++) {
             ZombiePirateEntity zombiePirateEntity = new ZombiePirateEntity(getWorld());
-
             double x = this.getX();
-
             double z = this.getZ();
 
             double newx = random.nextDouble(-2, i + i);
-
             double newz = random.nextDouble(-2, i + i);
 
             x += newx;
@@ -205,9 +172,6 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
 
     @Override
     protected void initAttributes() {
-
-
-
     }
 
     public void explode() {
@@ -215,10 +179,6 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
         this.spawnLoot = false;
         this.kill();
     }
-
-
-
-
 
     @Override
     protected void dropLoot(DamageSource damageSource, boolean causedByPlayer) {
@@ -243,25 +203,16 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     }
 
     private PlayState predicate(AnimationState<DeadBeardEntity> event) {
-
         if (isTntBombing()) {
             return event.setAndContinue(TNT_DEATH);
         }
-
         return event.setAndContinue(IDLE_OTHER);
-
-        
     }
-
-
-
-
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
     }
-
 
     public boolean isTntBombing() {
         return this.getDataTracker().get(TNT_ACTIVE);
@@ -283,10 +234,8 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
         setFuse(getFuse() - 1);
     }
 
-
     @Override
     protected void convertInWater() {
-
     }
 
     @Override

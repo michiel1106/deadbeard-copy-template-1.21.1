@@ -21,20 +21,10 @@ import org.jetbrains.annotations.*;
 public class TreasureChestBlock extends BlockWithEntity {
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
-
-
-
-
-
-
     public TreasureChestBlock(Settings settings) {
         super(settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
     }
-
-
-
-
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
@@ -47,7 +37,6 @@ public class TreasureChestBlock extends BlockWithEntity {
             default -> Block.createCuboidShape(3, 0, 4, 13, 8, 12);
         };
     }
-
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
@@ -64,7 +53,6 @@ public class TreasureChestBlock extends BlockWithEntity {
         return state.rotate(mirror.getRotation(state.get(FACING)));
     }
 
-
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(FACING);
@@ -80,15 +68,11 @@ public class TreasureChestBlock extends BlockWithEntity {
         return createCodec(TreasureChestBlock::new);
     }
 
-
-
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return world.isClient ? validateTicker(type, ModBlockEntities.TREASURE_CHEST_BLOCK_ENTITY, TreasureChestBlockEntity::clientTick) : validateTicker(type, ModBlockEntities.TREASURE_CHEST_BLOCK_ENTITY, TreasureChestBlockEntity::Tick);
     }
-
-
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
@@ -102,7 +86,6 @@ public class TreasureChestBlock extends BlockWithEntity {
         }
         return ActionResult.SUCCESS;
     }
-
 
     @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {

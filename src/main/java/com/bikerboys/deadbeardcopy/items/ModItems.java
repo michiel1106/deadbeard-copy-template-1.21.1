@@ -9,9 +9,6 @@ import static net.minecraft.registry.Registries.*;
 import net.minecraft.util.*;
 
 public class ModItems {
-
-
-
     public static final Item STONE_CUTLASS = register(
             new SwordItem(ToolMaterials.STONE, new Item.Settings().attributeModifiers(SwordItem.createAttributeModifiers(ToolMaterials.STONE, 3, -2.4F))),
             "stone_cutlass"
@@ -22,27 +19,17 @@ public class ModItems {
             "golden_cutlass"
     );
 
-
     public static final Item DEADBEARD_EGG = register(
             new SpawnEggItem(ModCustomEntities.DEADBEARD, 2369569, 1270579, new Item.Settings()),
             "deadbeard_spawn_egg"
     );
 
-
-
     public static Item register(Item item, String id) {
         Identifier itemID = Identifier.of(DeadbeardCopy.MOD_ID, id);
-
         Item registeredItem = Registry.register(ITEM, itemID, item);
-
         return registeredItem;
     }
 
-
-
-
-
     public static void initialize() {
-
     }
 }

@@ -25,7 +25,6 @@ public class BipedEntityHeldItemFeatureRenderer<T extends LivingEntity & GeoAnim
 
     @Override
     protected @Nullable ItemStack getStackForBone(GeoBone bone, T animatable) {
-
         ItemStack mainhand = animatable.getMainHandStack();
         ItemStack offhand = animatable.getOffHandStack();
 
@@ -41,13 +40,11 @@ public class BipedEntityHeldItemFeatureRenderer<T extends LivingEntity & GeoAnim
 
     @Override
     protected void renderStackForBone(MatrixStack poseStack, GeoBone bone, ItemStack stack, T animatable, VertexConsumerProvider bufferSource, float partialTick, int packedLight, int packedOverlay) {
-
         if (stack.isEmpty()) return;
 
         poseStack.push();
         poseStack.multiply(RotationAxis.POSITIVE_X.rotation(-bone.getRotX()));
         poseStack.multiply(RotationAxis.POSITIVE_Z.rotation(-bone.getRotZ()));
-
 
         poseStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
 

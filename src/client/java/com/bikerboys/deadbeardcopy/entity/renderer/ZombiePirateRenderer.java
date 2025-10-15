@@ -9,6 +9,7 @@ import net.minecraft.util.*;
 import software.bernie.geckolib.renderer.*;
 
 public class ZombiePirateRenderer extends GeoEntityRenderer<ZombiePirateEntity> {
+
     public ZombiePirateRenderer(EntityRendererFactory.Context context) {
         super(context, ModCustomEntities.ZOMBIE_PIRATE);
         this.addRenderLayer(new BipedEntityHeldItemFeatureRenderer<ZombiePirateEntity>(this));
