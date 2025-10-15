@@ -11,8 +11,6 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.*;
 
 public class ModCustomEntities {
-
-
     public static final EntityType<DeadBeardEntity> DEADBEARD = Registry.register(
             Registries.ENTITY_TYPE,
             Identifier.of(DeadbeardCopy.MOD_ID, "deadbeard"),
@@ -48,7 +46,6 @@ public class ModCustomEntities {
                     .build("deadbeard")
     );
 
-
     public static void registerAttributes() {
         FabricDefaultAttributeRegistry.register(DEADBEARD, DeadBeardEntity.setAttributes());
         FabricDefaultAttributeRegistry.register(SKELETON_PIRATE, AbstractSkeletonEntity.createAbstractSkeletonAttributes());
@@ -58,8 +55,5 @@ public class ModCustomEntities {
 
     public static void initialize() {
         registerAttributes();
-
-
     }
-
 }

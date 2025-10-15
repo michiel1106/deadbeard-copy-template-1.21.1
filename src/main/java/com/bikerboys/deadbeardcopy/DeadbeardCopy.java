@@ -1,5 +1,6 @@
 	package com.bikerboys.deadbeardcopy;
 
+	import com.bikerboys.deadbeardcopy.blocks.*;
 	import com.bikerboys.deadbeardcopy.entities.*;
 	import com.bikerboys.deadbeardcopy.items.*;
 	import net.fabricmc.api.ModInitializer;
@@ -22,6 +23,8 @@
 
 			ModCustomEntities.initialize();
 			ModItems.initialize();
+			ModBlockEntities.initialize();
+			ModBlocks.initialize();
 
 			BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.BEACH), SpawnGroup.MONSTER, ModCustomEntities.DEADBEARD, 500, 1, 1);
 

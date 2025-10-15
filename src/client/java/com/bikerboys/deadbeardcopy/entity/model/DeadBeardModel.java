@@ -12,7 +12,6 @@ import software.bernie.geckolib.model.data.*;
 
 public class DeadBeardModel extends GeoModel<DeadBeardEntity> {
 
-
     @Override
     public Identifier getModelResource(DeadBeardEntity deadBeardEntity) {
         return Identifier.of(DeadbeardCopy.MOD_ID, "geo/deadbeard.geo.json");
@@ -28,7 +27,6 @@ public class DeadBeardModel extends GeoModel<DeadBeardEntity> {
         return Identifier.of(DeadbeardCopy.MOD_ID, "animations/deadbeard.animation.json");
     }
 
-
     @Override
     public void setCustomAnimations(DeadBeardEntity animatable, long instanceId, AnimationState<DeadBeardEntity> animationState) {
 
@@ -37,7 +35,6 @@ public class DeadBeardModel extends GeoModel<DeadBeardEntity> {
         GeoBone leftArm = getAnimationProcessor().getBone("ArmLeft");
         GeoBone rightLeg = getAnimationProcessor().getBone("LegRight");
         GeoBone leftLeg = getAnimationProcessor().getBone("rotation");
-
 
         if (head != null) {
             EntityModelData data = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
@@ -53,8 +50,6 @@ public class DeadBeardModel extends GeoModel<DeadBeardEntity> {
         float swing = MathHelper.cos(limbSwing * walkSpeed) * 1.4F * limbSwingAmount;
         float swingOpposite = MathHelper.cos(limbSwing * walkSpeed + (float)Math.PI) * 1.4F * limbSwingAmount;
 
-
-
         if (!animatable.isTntBombing()) {
             if (rightArm != null) rightArm.setRotX(swing);
             if (leftArm != null) leftArm.setRotX(swingOpposite);
@@ -64,10 +59,4 @@ public class DeadBeardModel extends GeoModel<DeadBeardEntity> {
         if (leftLeg != null) leftLeg.setRotX(swing);
 
     }
-
-
-
-
-
-
 }

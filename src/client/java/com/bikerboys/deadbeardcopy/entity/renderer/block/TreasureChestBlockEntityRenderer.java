@@ -16,10 +16,7 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.*;
 
 public class TreasureChestBlockEntityRenderer implements BlockEntityRenderer<TreasureChestBlockEntity> {
-
-    private static final Identifier TEXTURE =
-            Identifier.of("deadbeardcopy", "textures/entity/treasure_chest.png");
-
+    private static final Identifier TEXTURE = Identifier.of("deadbeardcopy", "textures/entity/treasure_chest.png");
     private final TreasureChestModel model;
 
     public TreasureChestBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {

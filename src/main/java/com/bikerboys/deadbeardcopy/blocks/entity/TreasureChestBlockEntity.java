@@ -21,7 +21,6 @@ public class TreasureChestBlockEntity extends BlockEntity implements LidOpenable
 
     }
 
-
     public boolean getOpen() {
         return isOpen;
     }
@@ -39,8 +38,6 @@ public class TreasureChestBlockEntity extends BlockEntity implements LidOpenable
         setLidOpen(nbt.getBoolean("isopen"));
 
     }
-
-
 
     @Override
     public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
@@ -60,20 +57,12 @@ public class TreasureChestBlockEntity extends BlockEntity implements LidOpenable
         world.addSyncedBlockEvent(pos, state.getBlock(), 1, blockEntity.isOpen ? 1 : 0);
     }
 
-
-
-
-
-
-
     @Override
     public boolean onSyncedBlockEvent(int type, int data) {
         if (type == 1) {
             boolean open = data == 1;
             this.isOpen = open;
             this.lidAnimator.setOpen(open);
-
-
             return true;
         }
         return super.onSyncedBlockEvent(type, data);
@@ -83,16 +72,11 @@ public class TreasureChestBlockEntity extends BlockEntity implements LidOpenable
         return isOpen;
     }
 
-
     public void setLidOpen(boolean open) {
-
         this.isOpen = open;
         this.lidAnimator.setOpen(open);
-
         if (getWorld() != null) {
             markDirty();
-
-            System.out.println("setlidopenworldupate");
             getWorld().addSyncedBlockEvent(pos, getCachedState().getBlock(), 1, open ? 1 : 0);
         }
 

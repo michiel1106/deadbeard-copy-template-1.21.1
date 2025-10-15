@@ -29,21 +29,17 @@ public class TntFeatureRenderer extends BlockAndItemGeoLayer<DeadBeardEntity> {
         if (bone.getName().equals("Body")) {
             return Blocks.TNT.getDefaultState();
         }
-
         return null;
-
     }
 
     @Override
     protected void renderBlockForBone(MatrixStack poseStack, GeoBone bone, BlockState state, DeadBeardEntity entity, VertexConsumerProvider bufferSource, float partialTick, int packedLight, int packedOverlay) {
-
         if (!entity.isTntBombing()) return;
         if (entity.isAlive()) {
 
             poseStack.push();
             poseStack.scale(2, 2, 2);
             poseStack.translate(0, 1, 0);
-
 
             int fuse = entity.getFuse();
 
@@ -56,7 +52,6 @@ public class TntFeatureRenderer extends BlockAndItemGeoLayer<DeadBeardEntity> {
                 float finalScale = 1.0F + scaleFactor * 0.3F;
                 poseStack.scale(finalScale, finalScale, finalScale);
             }
-
 
             poseStack.push();
             poseStack.translate(-0.25F, -0.25F, -0.25F);
@@ -73,12 +68,9 @@ public class TntFeatureRenderer extends BlockAndItemGeoLayer<DeadBeardEntity> {
 
             MinecraftClient.getInstance().getBlockRenderManager().renderBlockAsEntity(state, poseStack, bufferSource, packedLight, uvOverlay);
 
-
+        poseStack.pop();
         poseStack.pop();
 
-
-        poseStack.pop();
-    }
-
+        }
     }
 }

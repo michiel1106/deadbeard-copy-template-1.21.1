@@ -13,17 +13,14 @@ public class FollowDeadbeardGoal extends Goal {
     private int delay;
     DeadBeardEntity target;
 
-
     public FollowDeadbeardGoal(HostileEntity entity, double speed) {
         this.entity = entity;
         this.speed = speed;
     }
 
-
     @Override
     public boolean canStart() {
         if (this.entity.getTarget() != null) return false;
-
         List<DeadBeardEntity> list = this.entity
                 .getWorld()
                 .getNonSpectatingEntities(DeadBeardEntity.class, this.entity.getBoundingBox().expand(8.0, 4.0, 8.0));
@@ -47,17 +44,11 @@ public class FollowDeadbeardGoal extends Goal {
         }
     }
 
-
-
-
     @Override
     public boolean shouldContinue() {
-
-
         double d = this.entity.squaredDistanceTo(this.target);
         return !(d < 9.0) && !(d > 256.0);
     }
-
 
     @Override
     public void start() {
@@ -73,11 +64,9 @@ public class FollowDeadbeardGoal extends Goal {
     @Override
     public void tick() {
         if (this.entity.getTarget() != null) return;
-
         if (--this.delay <= 0) {
             this.delay = this.getTickCount(20);
             this.entity.getNavigation().startMovingTo(this.target, this.speed);
         }
     }
-
 }

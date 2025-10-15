@@ -18,20 +18,13 @@ public class DeadBeardRenderer extends GeoEntityRenderer<DeadBeardEntity> {
         this.addRenderLayer(new DeadBeardHeldItemFeatureRenderer<DeadBeardEntity>(this));
     }
 
-
-
     @Override
     public Identifier getTexture(DeadBeardEntity entity) {
         return Identifier.of(DeadbeardCopy.MOD_ID, "textures/entity/deadbeard/deadbeard.png");
     }
 
-
     @Override
     public void render(DeadBeardEntity entity, float entityYaw, float partialTick, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight) {
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
     }
-
-
-
-
 }

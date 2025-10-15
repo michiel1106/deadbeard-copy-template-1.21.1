@@ -15,15 +15,11 @@ import net.minecraft.client.render.entity.model.*;
 import net.minecraft.util.*;
 
 public class DeadbeardCopyClient implements ClientModInitializer {
-	public static EntityModelLayer DEADBEARD_LAYER = new EntityModelLayer(Identifier.of(MOD_ID, "deadbeard"), "main");
-
 	public static final EntityModelLayer TREASURE_CHEST =
 			new EntityModelLayer(Identifier.of("deadbeardcopy", "treasure_chest"), "main");
 
 	@Override
 	public void onInitializeClient() {
-
-
 		EntityRendererRegistry.register(ModCustomEntities.DEADBEARD, (DeadBeardRenderer::new));
 		EntityRendererRegistry.register(ModCustomEntities.SKELETON_PIRATE, (SkeletonPirateRenderer::new));
 		EntityRendererRegistry.register(ModCustomEntities.ZOMBIE_PIRATE, (ZombiePirateRenderer::new));
