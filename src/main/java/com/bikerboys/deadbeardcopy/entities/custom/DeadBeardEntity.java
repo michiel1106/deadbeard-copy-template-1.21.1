@@ -28,8 +28,10 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     private final Random random = new Random();
     private int spawnCooldown = 400;
     protected static final RawAnimation IDLE_OTHER = RawAnimation.begin().thenLoop("idle");
-    protected static final RawAnimation ATTACK_ANIM_OTHER = RawAnimation.begin().then("attack", Animation.LoopType.PLAY_ONCE);
+
     protected static final RawAnimation TNT_DEATH = RawAnimation.begin().thenLoop("tnt");
+    protected static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
+    protected static final RawAnimation ATTACK = RawAnimation.begin().then("Deadbeard_attack", Animation.LoopType.PLAY_ONCE);
 
     public DeadBeardEntity(EntityType<? extends ZombieEntity> entityType, World world) {
         super(entityType, world);
@@ -55,6 +57,15 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
         nbt.putInt("tnt_fuse", dataTracker.get(TNT_FUSE));
         nbt.putInt("spawn_cooldown", spawnCooldown);
         nbt.putBoolean("spawn_loot", spawnLoot);
+    }
+
+    @Override
+    public boolean tryAttack(Entity target) {
+        boolean canAttack = super.tryAttack(target) && !isTntBombing();
+        if (canAttack) {
+            triggerAnim("controller", "attack");
+        }
+        return canAttack;
     }
 
     @Override
@@ -92,7 +103,6 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
                     this.playSound(SoundEvents.ENTITY_TNT_PRIMED);
                 }
             }
-
             if (this.spawnCooldown > 0) {
                 spawnCooldown--;
             }
@@ -111,6 +121,13 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
 
     @Override
     public void setBaby(boolean baby) {
+    }
+
+    @Override
+    public void tickMovement() {
+        if (!isTntBombing()) {
+            super.tickMovement();
+        }
     }
 
     @Override
@@ -164,7 +181,9 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     }
 
     public void explode() {
-        this.getWorld().createExplosion(this, getX(), getY(), getZ(), 3, World.ExplosionSourceType.TNT);
+        if (!this.getWorld().isClient) {
+            this.getWorld().createExplosion(this, getX(), getY(), getZ(), 3, World.ExplosionSourceType.TNT);
+        }
         this.spawnLoot = false;
         this.kill();
     }
@@ -178,12 +197,7 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>(this, "controller", 5, this::predicate).triggerableAnim("attack", ATTACK_ANIM_OTHER));
-    }
-
-    @Override
-    protected void attackLivingEntity(LivingEntity target) {
-        super.attackLivingEntity(target);
+        controllerRegistrar.add(new AnimationController<>(this, "controller", 3, this::predicate).triggerableAnim("attack", ATTACK));
     }
 
     @Override
@@ -195,6 +209,12 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
         if (isTntBombing()) {
             return event.setAndContinue(TNT_DEATH);
         }
+
+        if (event.isMoving()) {
+            return event.setAndContinue(WALK);
+        }
+
+
         return event.setAndContinue(IDLE_OTHER);
     }
 
