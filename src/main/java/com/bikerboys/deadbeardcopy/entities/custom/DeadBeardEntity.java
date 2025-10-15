@@ -4,7 +4,6 @@ package com.bikerboys.deadbeardcopy.entities.custom;
 import com.bikerboys.deadbeardcopy.entities.*;
 import com.bikerboys.deadbeardcopy.items.*;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.*;
 import net.minecraft.entity.damage.*;
 import net.minecraft.entity.data.*;
@@ -12,7 +11,6 @@ import net.minecraft.entity.mob.*;
 import net.minecraft.item.*;
 import net.minecraft.nbt.*;
 import net.minecraft.sound.*;
-import net.minecraft.util.math.*;
 import net.minecraft.world.*;
 import software.bernie.geckolib.animatable.*;
 import software.bernie.geckolib.animatable.instance.*;
@@ -59,20 +57,14 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
         nbt.putBoolean("spawn_loot", spawnLoot);
     }
 
-
-
-
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         this.spawnCooldown = nbt.contains("spawn_cooldown") ? nbt.getInt("spawn_cooldown") : random.nextInt(1200, 1500);
         setTntBombing(nbt.contains("tnt_active") ? nbt.getBoolean("tnt_active") : false);
         setFuse(nbt.contains("tnt_fuse") ? nbt.getInt("tnt_fuse") : 100);
-
         this.spawnLoot = nbt.contains("spawn_loot") ? nbt.getBoolean("spawn_loot") : true;
     }
-
-
 
     public static DefaultAttributeContainer.Builder setAttributes() {
         return HostileEntity.createHostileAttributes()
@@ -126,8 +118,8 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     }
 
     public void spawnLackeys() {
-        int skeleLackeys = 0;
-        int zombieLackeys = 0;
+        int skeleLackeys;
+        int zombieLackeys;
 
         skeleLackeys = random.nextInt(2, 4);
         zombieLackeys = random.nextInt(2, 4);
@@ -165,10 +157,7 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
 
             getWorld().spawnEntity(zombiePirateEntity);
         }
-
-
     }
-
 
     @Override
     protected void initAttributes() {
