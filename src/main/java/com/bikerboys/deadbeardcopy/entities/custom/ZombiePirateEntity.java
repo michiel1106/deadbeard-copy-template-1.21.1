@@ -1,8 +1,10 @@
 package com.bikerboys.deadbeardcopy.entities.custom;
 
 import com.bikerboys.deadbeardcopy.entities.*;
+import com.bikerboys.deadbeardcopy.goals.*;
 import com.bikerboys.deadbeardcopy.items.*;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.*;
 import net.minecraft.entity.damage.*;
 import net.minecraft.entity.data.*;
@@ -40,6 +42,13 @@ public class ZombiePirateEntity extends ZombieEntity implements GeoEntity {
         super(ModCustomEntities.ZOMBIE_PIRATE, world);
     }
 
+
+
+
+
+
+
+
     @Override
     public void tick() {
         super.tick();
@@ -47,12 +56,21 @@ public class ZombiePirateEntity extends ZombieEntity implements GeoEntity {
         if (timeTillDeath > 0) {
             timeTillDeath--;
         } else {
-            // Only start "dying" after countdown hits 0
+
             if (dyingTimer-- <= 0) {
                 this.damage(getWorld().getDamageSources().magic(), 2);
-                dyingTimer = 20; // Repeat damage every 10 ticks
+                dyingTimer = 20;
             }
         }
+    }
+
+
+    @Override
+    protected void initGoals() {
+        super.initGoals();
+        goalSelector.add(1, new SwimGoal(this));
+        goalSelector.add(5, new FollowDeadbeardGoal(this, 1.0f));
+
     }
 
     @Override
@@ -122,6 +140,7 @@ public class ZombiePirateEntity extends ZombieEntity implements GeoEntity {
 
         return event.setAndContinue(IDLE_ANIM);
     }
+
 
 
     public static DefaultAttributeContainer.Builder createZombiePirateAttributes() {

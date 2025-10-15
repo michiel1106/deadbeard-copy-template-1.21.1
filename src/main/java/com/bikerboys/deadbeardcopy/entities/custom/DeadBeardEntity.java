@@ -4,6 +4,7 @@ package com.bikerboys.deadbeardcopy.entities.custom;
 import com.bikerboys.deadbeardcopy.entities.*;
 import com.bikerboys.deadbeardcopy.items.*;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.*;
 import net.minecraft.entity.damage.*;
 import net.minecraft.entity.data.*;
@@ -211,13 +212,13 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
 
     public void explode() {
         this.getWorld().createExplosion(this, getX(), getY(), getZ(), 3, World.ExplosionSourceType.TNT);
-
         this.spawnLoot = false;
-
-
         this.kill();
-
     }
+
+
+
+
 
     @Override
     protected void dropLoot(DamageSource damageSource, boolean causedByPlayer) {

@@ -1,8 +1,10 @@
 package com.bikerboys.deadbeardcopy.entities.custom;
 
 import com.bikerboys.deadbeardcopy.entities.*;
+import com.bikerboys.deadbeardcopy.goals.*;
 import com.bikerboys.deadbeardcopy.items.*;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.data.*;
 import net.minecraft.entity.mob.*;
 import net.minecraft.item.*;
@@ -32,6 +34,15 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
         super(entityType, world);
     }
 
+    @Override
+    protected void initGoals() {
+        super.initGoals();
+        goalSelector.add(1, new SwimGoal(this));
+        goalSelector.add(6, new FollowDeadbeardGoal(this, 1.0f));
+
+
+    }
+
     public SkeletonPirateEntity(World world) {
         super(ModCustomEntities.SKELETON_PIRATE, world);
     }
@@ -48,10 +59,10 @@ public class SkeletonPirateEntity extends SkeletonEntity implements GeoEntity {
         if (timeTillDeath > 0) {
             timeTillDeath--;
         } else {
-            // Only start "dying" after countdown hits 0
+
             if (dyingTimer-- <= 0) {
                 this.damage(getWorld().getDamageSources().magic(), 2);
-                dyingTimer = 20; // Repeat damage every 10 ticks
+                dyingTimer = 20;
             }
         }
     }
