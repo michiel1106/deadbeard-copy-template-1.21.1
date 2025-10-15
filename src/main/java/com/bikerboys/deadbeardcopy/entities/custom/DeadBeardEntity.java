@@ -12,6 +12,7 @@ import net.minecraft.item.*;
 import net.minecraft.nbt.*;
 import net.minecraft.sound.*;
 import net.minecraft.world.*;
+import org.jetbrains.annotations.*;
 import software.bernie.geckolib.animatable.*;
 import software.bernie.geckolib.animatable.instance.*;
 import software.bernie.geckolib.animation.*;
@@ -25,13 +26,16 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     private boolean spawnLoot = false;
     private static final TrackedData<Boolean> TNT_ACTIVE = DataTracker.registerData(DeadBeardEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Integer> TNT_FUSE = DataTracker.registerData(DeadBeardEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    public static final TrackedData<Integer> TARGET_ID = DataTracker.registerData(DeadBeardEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private final Random random = new Random();
     private int spawnCooldown = 400;
-    protected static final RawAnimation IDLE_OTHER = RawAnimation.begin().thenLoop("idle");
+    protected static final RawAnimation IDLE_OTHER = RawAnimation.begin().thenLoop("Deadbeard_IdleNormal");
+    protected static final RawAnimation IDLE_AGGRO = RawAnimation.begin().thenLoop("Deadbeard_walkAggro");
 
     protected static final RawAnimation TNT_DEATH = RawAnimation.begin().thenLoop("tnt");
     protected static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
     protected static final RawAnimation ATTACK = RawAnimation.begin().then("Deadbeard_attack", Animation.LoopType.PLAY_ONCE);
+    protected static final RawAnimation WALK_AGGRO = RawAnimation.begin().thenLoop("Deadbeard_walkAggro");
 
     public DeadBeardEntity(EntityType<? extends ZombieEntity> entityType, World world) {
         super(entityType, world);
@@ -48,7 +52,23 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
         super.initDataTracker(builder);
         builder.add(TNT_ACTIVE, false);
         builder.add(TNT_FUSE, 100);
+        builder.add(TARGET_ID, -1);
     }
+
+    @Nullable
+    public LivingEntity getClientTarget() {
+        int id = this.getDataTracker().get(TARGET_ID);
+        if (id == -1) return null;
+        Entity e = this.getWorld().getEntityById(id);
+        return e instanceof LivingEntity le ? le : null;
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        super.setTarget(target);
+        this.getDataTracker().set(TARGET_ID, target == null ? -1 : target.getId());
+    }
+
 
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
@@ -71,7 +91,7 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.spawnCooldown = nbt.contains("spawn_cooldown") ? nbt.getInt("spawn_cooldown") : random.nextInt(1200, 1500);
+        this.spawnCooldown = nbt.contains("spawn_cooldown") ? nbt.getInt("spawn_cooldown") : 20;
         setTntBombing(nbt.contains("tnt_active") ? nbt.getBoolean("tnt_active") : false);
         setFuse(nbt.contains("tnt_fuse") ? nbt.getInt("tnt_fuse") : 100);
         this.spawnLoot = nbt.contains("spawn_loot") ? nbt.getBoolean("spawn_loot") : true;
@@ -103,12 +123,14 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
                     this.playSound(SoundEvents.ENTITY_TNT_PRIMED);
                 }
             }
-            if (this.spawnCooldown > 0) {
-                spawnCooldown--;
-            }
-            if (spawnCooldown == 0) {
-                spawnLackeys();
-                spawnCooldown = random.nextInt(1200, 1500);
+            if (getTarget() != null) {
+                if (this.spawnCooldown > 0) {
+                    spawnCooldown--;
+                }
+                if (spawnCooldown == 0) {
+                    spawnLackeys();
+                    spawnCooldown = random.nextInt(1200, 1500);
+                }
             }
         }
         super.tick();
@@ -210,11 +232,19 @@ public class DeadBeardEntity extends ZombieEntity implements GeoEntity {
             return event.setAndContinue(TNT_DEATH);
         }
 
+        if (this.getClientTarget() != null) {
+            if (event.isMoving()) {
+                return event.setAndContinue(WALK_AGGRO);
+            }
+        }
+
         if (event.isMoving()) {
             return event.setAndContinue(WALK);
         }
 
-
+        if (this.getClientTarget() != null) {
+            return event.setAndContinue(IDLE_AGGRO);
+        }
         return event.setAndContinue(IDLE_OTHER);
     }
 
